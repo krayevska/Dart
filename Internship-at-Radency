@@ -1,0 +1,28 @@
+int chooseBestDistance(int t, int k, List<int> ls){
+  // твій код
+  if (ls.length < k){
+    print (-1);
+  } 
+  else{
+    ls.sort();
+    int findBest (n){
+      var currentList = ls.sublist(n - k + 1, n + 1);
+      var curentSum = currentList.fold(0, (p, c) => p + c);
+      if (curentSum > t){
+        findBest (n - 1);   
+      }
+      else{
+        print (curentSum);
+      }
+      return 0;
+    }
+    findBest (ls.length - 1);
+  } 
+  return 0;
+}
+
+void main(){
+  chooseBestDistance(174, 3, [51, 56, 58, 59, 61]); //173
+  chooseBestDistance(163, 3, [50]); // -1
+  //chooseBestDistance(200, 4, [49, 56, 58, 59, 61, 36, 98]); //199
+}
