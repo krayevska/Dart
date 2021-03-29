@@ -1,0 +1,59 @@
+int chooseBestDistance(int t, int k, List<int> ls) {
+  // твій код
+  
+  //якщо відстаней у списку Мері замало:
+  if (ls.length < k){
+    //print(-1);
+    return -1;
+  }
+  
+  //створюю змінну для результату і список розміру k де всі елементи = 0:
+  var result = 0;
+  var subset = List<int>.filled(k, 0, growable: true);
+  
+  //функція отримує суми відстаней з усіх можливих комбінацій по k 
+  //елементів в кожному, найближчу до t суму зберігає в result:
+  void findBestDistance(int subsetSum){
+    if(subsetSum <= t && subsetSum > result){
+      result = subsetSum;
+    }
+  }
+  
+ //combineSubsets() за допомогою рекурсивної ітерація формує усі можливі 
+ //комбінації елементів з списку ls розміром k, 
+ //суми елементів передає в findBestDistance(),
+ //first, last - перший і останній індекси в ls 
+ //subsetInd - індекс в subset:
+  int combineSubsets (List<int> ls, List<int> subset, int first, int last,
+                    int subsetInd){
+    
+    //коли розмір комбінації == k, subset наповнений, 
+    //сума його елементів передається в findBestDistance():
+    if (subsetInd == k){
+      findBestDistance(subset.fold(0, (a, b) => a + b));
+      return 1;
+    }
+    
+    //якщо subset ще не наповнений:
+    //фіксуємо почергово ітерацією елементи з ls на тому ж індексі в subset,
+    //між тим рекурсивно викликаємо функцію з ++ індексами,
+    //заповнюючи решту індексів в subset аж поки subset не буде повний:
+    for (int i=first; i<=last && last-i+1 >= k-subsetInd; i++){
+      subset[subsetInd] = ls[i];
+      combineSubsets(ls, subset, i + 1, last, subsetInd + 1);
+    }
+  }
+
+  //перший виклик combineSubsets()
+  combineSubsets(ls, subset, 0, ls.length - 1, 0);
+  
+  //print(result);
+  return result;
+}
+
+void main() {
+  chooseBestDistance(174, 3, [51, 56, 58, 59, 61]); //173
+  chooseBestDistance(163, 3, [50]); // -1
+  chooseBestDistance(200, 4, [49, 56, 58, 59, 61, 36, 98]); //200
+  chooseBestDistance(331, 4, [91, 74, 73, 85, 73, 81, 87]); //331
+}
